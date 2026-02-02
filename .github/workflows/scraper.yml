@@ -2,7 +2,7 @@ name: Google Play Reviews Pipeline
 
 on:
   schedule:
-    - cron: "30 1 * * *"   # Runs daily at 07:00 IST
+    - cron: "30 1 * * *"   # Runs daily at 07:00 IST (UTC based)
   workflow_dispatch:
 
 jobs:
@@ -26,17 +26,15 @@ jobs:
 
       - name: Create service account key
         run: |
-          echo "${{ secrets.GCP_SA_KEY }}" > sa.json
-
-      - name: Authenticate GCP
-        run: |
-          export GOOGLE_APPLICATION_CREDENTIALS=$PWD/sa.json
+          cat <<EOF > sa.json
+          ${{ secrets.GCP_SA_KEY }}
+          EOF
 
       - name: Run scraper
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
         run: |
-          python fetch_google_reviews.py
+          python fetch-reviews.py
 
       - name: Upload logs (always)
         if: always()
