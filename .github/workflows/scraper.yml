@@ -29,7 +29,9 @@ jobs:
           cat <<EOF > sa.json
           ${{ secrets.GCP_SA_KEY }}
           EOF
-
+          
+      - name: Show files
+        run: ls -R
       - name: Run scraper
         env:
           GOOGLE_APPLICATION_CREDENTIALS: ${{ github.workspace }}/sa.json
