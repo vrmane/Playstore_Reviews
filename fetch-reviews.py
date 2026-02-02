@@ -10,6 +10,14 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from google_play_scraper import reviews, Sort
 from google.cloud import bigquery
 
+
+open("monitor.log", "a").close()
+
+if not os.path.exists("checkpoint.json"):
+    with open("checkpoint.json", "w") as f:
+        f.write("{}")
+
+
 # =========================================================
 print("🧪 FINAL SCRIPT | BigQuery Backend | Parallel | Crash-Resume | Monitoring", flush=True)
 
